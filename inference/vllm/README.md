@@ -1,4 +1,4 @@
-## Qwen2.5_72B_Instruct
+## Qwen2.5-72B-Instruct
 1. Launch vllm docker image
 ```
 podman run -it --name rocm_vllm_dev_nightly_main_20251114  --device=/dev/dri --device=/dev/kfd --device=/dev/infiniband --device=/dev/infiniband/rdma_cm --privileged --network=host --ipc=host --cap-add=SYS_ADMIN --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --group-add keep-groups --ipc=host -v /shared/amdgpu/home/share/models:/models -v /shared/data:/shared/data -v /shared:/shared  -v $HOME:/workdir --workdir /workdir  docker://rocm/vllm-dev:nightly_main_20251114 bash
@@ -6,7 +6,7 @@ podman run -it --name rocm_vllm_dev_nightly_main_20251114  --device=/dev/dri --d
 
 2. Benchmark Qwen2.5_72B_Instruct with vllm
 ```bash
-./test_Qwen2.5_72B_Instruct.sh
+./test_Qwen2.5-72B-Instruct.sh
 ```
 
 3. Parse performance data and saved in csv

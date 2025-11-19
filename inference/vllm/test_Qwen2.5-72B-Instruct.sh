@@ -7,7 +7,7 @@ MODEL_PATH="/models/Qwen2.5-72B-Instruct"
 MODEL_NAME="Qwen2.5-72B-Instruct"
 
 # Output directory
-OUT_DIR="/workdir/qwen2.5-72B-Instruct"
+OUT_DIR="/workdir/Qwen2.5-72B-Instruct"
 mkdir -p "$OUT_DIR"
 
 # ISL/OSL pairs
