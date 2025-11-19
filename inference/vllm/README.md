@@ -14,15 +14,15 @@ podman run -it --name rocm_vllm_dev_nightly_main_20251114  --device=/dev/dri --d
 python parse_results_vllm.py --input_dir Qwen2.5-72B-Instruct-logs/ --output_file Qwen2.5-72B-Instruct-vllm_benchmark_results.csv
 ```
 
-## Qwen3-235b-A22B
+## Qwen3-235B-A22B
 1. Launch vllm docker image
 ```
 podman run -it --name rocm_vllm_dev_nightly_main_20251114  --device=/dev/dri --device=/dev/kfd --device=/dev/infiniband --device=/dev/infiniband/rdma_cm --privileged --network=host --ipc=host --cap-add=SYS_ADMIN --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --group-add keep-groups --ipc=host -v /shared/amdgpu/home/share/models:/models -v /shared/data:/shared/data -v /shared:/shared  -v $HOME:/workdir --workdir /workdir  docker://rocm/vllm-dev:nightly_main_20251114 bash
 ```
 
-2. Benchmark Qwen3-235b-A22B with vllm
+2. Benchmark Qwen3-235B-A22B with vllm
 ```bash
-./test_Qwen3-235b-A22B.sh
+./test_Qwen3-235B-A22B.sh
 ```
 
 3. Parse performance data and saved in csv
