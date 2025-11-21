@@ -24,8 +24,24 @@ DATASET="random"
 NUM_PROMPT=256
 
 # Launch server
-SGLANG_USE_AITER=1 python3 -m sglang.launch_server     --model-path $MODEL_PATH  --host localhost     --port 8000     --tensor-parallel-size 8     --trust-remote-code     --chunked-prefill-size 196608     --mem-fraction-static 0.8     --disable-radix-cache     --num-continuous-decode-steps 4     --max-prefill-tokens 196608     --cuda-graph-max-bs 128 &
+SGLANG_USE_AITER=1 python3 -m sglang.launch_server \
+     	--model-path $MODEL_PATH \
+       	--host localhost \
+    	--port 8000  \
+     	--tensor-parallel-size 8 \
+    	--trust-remote-code \
+    	--chunked-prefill-size 196608  \
+     	--mem-fraction-static 0.8 \
+    	--disable-radix-cache \
+     	--num-continuous-decode-steps 4 \
+    	--max-prefill-tokens 196608  \
+    	--cuda-graph-max-bs 128 &
 
+# Sleep 300s
+echo "Sleep 300s waiting for server to launch ..."
+sleep 300
+
+# Launch benchmark test
 # Loop over combinations
 for idx in "${!isl_list[@]}"; do
     isl=${isl_list[$idx]}
