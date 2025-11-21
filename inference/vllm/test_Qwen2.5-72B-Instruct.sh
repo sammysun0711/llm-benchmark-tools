@@ -23,9 +23,25 @@ METRIC_LIST="ttft,tpot,itl,e2el"
 DATASET="random"
 
 # Launch server
-HIP_FORCE_DEV_KERNARG=1 VLLM_ROCM_USE_AITER=1 VLLM_V1_USE_PREFILL_DECODE_ATTENTION=0 VLLM_ROCM_USE_AITER_MHA=1 VLLM_USE_V1=1 VLLM_WORKER_MULTIPROC_METHOD="spawn" SAFETENSORS_FAST_GPU=1 vllm serve $MODEL_PATH  --served-model-name $MODEL_NAME --trust-remote-code --kv-cache-dtype fp8 -tp 8 --max-num-batched-tokens 131072 --no-enable-prefix-caching --disable-log-requests --compilation-config '{"full_cuda_graph":true}' &
+HIP_FORCE_DEV_KERNARG=1 \
+VLLM_ROCM_USE_AITER=1 \
+VLLM_V1_USE_PREFILL_DECODE_ATTENTION=0 \
+VLLM_ROCM_USE_AITER_MHA=1 \
+VLLM_USE_V1=1 \
+VLLM_WORKER_MULTIPROC_METHOD="spawn" \
+SAFETENSORS_FAST_GPU=1 \
+vllm serve $MODEL_PATH \
+    --served-model-name $MODEL_NAME \
+    --trust-remote-code \
+    --kv-cache-dtype fp8 \
+    -tp 8 \
+    --max-num-batched-tokens 131072 \
+    --no-enable-prefix-caching \
+    --disable-log-requests \
+    --compilation-config '{"full_cuda_graph":true}' &
 
 # Sleep 600s
+echo "Sleep 600s waiting for server to launch ..."
 sleep 600
 
 # Run benchmark test
