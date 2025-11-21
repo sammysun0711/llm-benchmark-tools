@@ -27,6 +27,7 @@ METRIC_PERCENTILES="50,90,95,99"
 METRIC_LIST="ttft,tpot,itl,e2el"
 DATASET="image"
 NUM_PROMPT=128
+MM_ATTENTION_BACKEND="aiter_attn" #fa3 for H20
 
 # Launch server
 SGLANG_USE_AITER=1 python3 -m sglang.launch_server \
@@ -37,7 +38,7 @@ SGLANG_USE_AITER=1 python3 -m sglang.launch_server \
     --dp-size 2 \
     --trust-remote-code \
     --mem-fraction-static 0.8 \
-    --mm-attention-backend "fa3" \
+    --mm-attention-backend "${MM_ATTENTION_BACKEND}" \
     --disable-radix-cache \
     --cuda-graph-max-bs 64 &
 
