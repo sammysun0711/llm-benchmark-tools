@@ -61,7 +61,7 @@ for idx in "${!isl_list[@]}"; do
         log_filename="${MODEL_NAME}_isl${isl}_osl${osl}_img_res${img_res_x}x${img_res_y}_image_count${image_count}_c${conc}_sglang.log"
 
         echo ">>> Running benchmark: ISL=${isl}, OSL=${osl}, Concurrency=${conc}, Image Resolution=${img_res_x}x${img_res_y}, Image Count=${image_count}"
-        #if [ $conc -gt 32 ]; then
+        #if [ $conc -ge 32 ]; then
 	#    NUM_PROMPT=$(( 2*conc))	
 	#else
 	#    NUM_PROMPT=32

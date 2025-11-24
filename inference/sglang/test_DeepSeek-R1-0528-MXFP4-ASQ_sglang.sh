@@ -53,11 +53,11 @@ for idx in "${!isl_list[@]}"; do
         log_filename="${MODEL_NAME}_isl${isl}_osl${osl}_c${conc}_sglang.log"
 
         echo ">>> Running benchmark: ISL=${isl}, OSL=${osl}, Concurrency=${conc}"
-        if [ $conc -gt 32 ]; then
-	    NUM_PROMPT=$(( 2*conc))	
-	else
-	    NUM_PROMPT=32
-	fi
+        # if [ $conc -ge 32 ]; then
+		# 	NUM_PROMPT=$(( 2*conc))
+		# else
+		# 	NUM_PROMPT=32
+		# fi
         python3 -m sglang.bench_serving \
 		--host localhost \
 		--port 8000 \
@@ -69,7 +69,7 @@ for idx in "${!isl_list[@]}"; do
 		--max-concurrency "$conc" \
 		--num-prompt "$NUM_PROMPT" \
 		--output-file "$OUT_DIR/$result_filename" \
-	        2>&1 | tee "$OUT_DIR/$log_filename"
+	    2>&1 | tee "$OUT_DIR/$log_filename"
 
         echo ">>> Finished benchmark: ISL=${isl}, OSL=${osl}, Concurrency=${conc}"
         echo

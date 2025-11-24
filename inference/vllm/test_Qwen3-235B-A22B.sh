@@ -59,14 +59,16 @@ for idx in "${!isl_list[@]}"; do
         log_filename="${MODEL_NAME}_isl${isl}_osl${osl}_c${conc}_vllm.log"
 
         echo ">>> Running benchmark: ISL=${isl}, OSL=${osl}, Concurrency=${conc}"
-        if [ $conc -gt 32 ]; then
-	    NUM_PROMPT=$(( 2*conc))	
-	else
-	    NUM_PROMPT=32
-	fi 
+        # if [ $conc -ge 32 ]; then
+        #     NUM_PROMPT=$(( 2*conc))
+        # else
+	    #     NUM_PROMPT=32
+        # fi
         vllm bench serve \
             --backend vllm \
-            --model "$MODEL_NAME" \
+            --model $MODEL_PATH \
+            --served-model-name $MODEL_NAME \
+            --trust-remote-code \
             --port 8000 \
             --num-prompts "$NUM_PROMPT" \
             --metric_percentiles "$METRIC_PERCENTILES" \
