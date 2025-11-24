@@ -34,8 +34,8 @@ SGLANG_USE_AITER=1 python3 -m sglang.launch_server \
     --model-path $MODEL_PATH \
     --host localhost    \
     --port 9000 \
-    --tp-size 4 \
-    --dp-size 2 \
+    --tensor-parallel-size 4 \
+    --data-parallel-size 2 \
     --trust-remote-code \
     --mem-fraction-static 0.8 \
     --mm-attention-backend "${MM_ATTENTION_BACKEND}" \
@@ -62,27 +62,27 @@ for idx in "${!isl_list[@]}"; do
 
         echo ">>> Running benchmark: ISL=${isl}, OSL=${osl}, Concurrency=${conc}, Image Resolution=${img_res_x}x${img_res_y}, Image Count=${image_count}"
         #if [ $conc -ge 32 ]; then
-	#    NUM_PROMPT=$(( 2*conc))	
-	#else
-	#    NUM_PROMPT=32
-	#fi
+        #    NUM_PROMPT=$(( 2*conc))
+        #else
+        #    NUM_PROMPT=32
+        #fi
         python3 -m sglang.bench_serving \
                 --backend sglang-oai-chat \
-		--host localhost \
-		--port 9000 \
-		--model "$MODEL_PATH" \
-		--dataset-name "$DATASET" \
-		--random-input "$isl" \
-		--random-output "$osl" \
-		--random-range-ratio 1.0 \
-		--max-concurrency "$conc" \
-		--num-prompt "$NUM_PROMPT" \
+                --host localhost \
+                --port 9000 \
+                --model "$MODEL_PATH" \
+                --dataset-name "$DATASET" \
+                --random-input "$isl" \
+                --random-output "$osl" \
+                --random-range-ratio 1.0 \
+                --max-concurrency "$conc" \
+                --num-prompt "$NUM_PROMPT" \
                 --image-count ${image_count}   \
                 --image-resolution "${img_res_x}x${img_res_y}" \
                 --flush-cache \
-		--exclude-special-tokens \
-		--output-file "$OUT_DIR/$result_filename" \
-	        2>&1 | tee "$OUT_DIR/$log_filename"
+                --exclude-special-tokens \
+                --output-file "$OUT_DIR/$result_filename" \
+                2>&1 | tee "$OUT_DIR/$log_filename"
 
         echo ">>> Finished benchmark: ISL=${isl}, OSL=${osl}, Concurrency=${conc}, Image Resolution=${img_res_x}x${img_res_y}, Image Count=${image_count} "
         echo

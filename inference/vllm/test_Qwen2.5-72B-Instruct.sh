@@ -35,7 +35,7 @@ vllm serve $MODEL_PATH \
     --served-model-name $MODEL_NAME \
     --trust-remote-code \
     --kv-cache-dtype fp8 \
-    -tp 8 \
+    --tensor-parallel-size 8 \
     --max-num-batched-tokens 131072 \
     --no-enable-prefix-caching \
     --disable-log-requests \
