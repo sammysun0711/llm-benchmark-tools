@@ -6,19 +6,19 @@ podman run -it  --name megatron_training_env --device /dev/dri --device /dev/kfd
 
 2. Install python dependency
 
-2.1. Install Megatron Core adapter
+- Install Megatron Core adapter
 ```bash
 pip install "git+https://github.com/alibaba/roll.git#subdirectory=mcore_adapter"
 ```
 
-2.2. Install latest Megatron-LM
+- Install latest Megatron-LM
 ```bash
 pip uninstall megatron-core
 git clone https://github.com/ROCm/Megatron-LM && cd Megatron-LM
 pip install -e .
 ```
 
-2.3. Install LLaMA-Factory
+- Install LLaMA-Factory
 ```bash
 git clone https://github.com/sammysun0711/LLaMA-Factory -b qwen3_sft && cd LLaMA-Factory
 pip install -r requirements.txt
