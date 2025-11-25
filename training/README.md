@@ -5,6 +5,7 @@ podman run -it  --name megatron_training_env --device /dev/dri --device /dev/kfd
 ```
 
 2. Install python dependency
+
 2.1. Install Megatron Core adapter
 ```bash
 pip install "git+https://github.com/alibaba/roll.git#subdirectory=mcore_adapter"
@@ -19,14 +20,14 @@ pip install -e .
 
 2.3. Install LLaMA-Factory
 ```bash
-git clone https://github.com/sammysun0711/LLaMA-Factory && cd LLaMA-Factory
+git clone https://github.com/sammysun0711/LLaMA-Factory -b qwen3_sft && cd LLaMA-Factory
 pip install -r requirements.txt
 pip install -e ".[torch,metrics]"
 ```
 
 3. Run fine tuning
 ```bash
-USE_MCA=1 llamafactory-cli train examples/megatron/qwen3_moe_full.yaml
+USE_MCA=1 TOKENIZERS_PARALLELISM=False OMP_NUM_THREADS=1 llamafactory-cli train examples/megatron/qwen3_moe_full.yaml
 ```
 
 ### Qwen3-VL-30B-A3B SFT
@@ -37,7 +38,7 @@ podman run -it  --name megatron_training_env --device /dev/dri --device /dev/kfd
 
 2. Install python dependency
 ```bash
-git clone https://github.com/sammysun0711/LLaMA-Factory && cd LLaMA-Factory
+git clone https://github.com/sammysun0711/LLaMA-Factory -b qwen3_sft && cd LLaMA-Factory
 pip install -r requirements.txt
 pip install transformers==4.57.1
 pip install -e ".[torch,metrics]"
@@ -45,7 +46,7 @@ pip install -e ".[torch,metrics]"
 
 3. Run fine tuning
 ```bash
-llamafactory-cli train examples/train_lora/qwen3_vl_lora_sft.yaml
+TOKENIZERS_PARALLELISM=False OMP_NUM_THREADS=1 llamafactory-cli train examples/train_lora/qwen3_vl_lora_sft.yaml
 ```
 
 ### DeepSeek v3
