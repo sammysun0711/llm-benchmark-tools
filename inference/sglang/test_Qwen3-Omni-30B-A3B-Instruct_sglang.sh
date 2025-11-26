@@ -41,6 +41,8 @@ SGLANG_USE_AITER=1 python3 -m sglang.launch_server \
     --mm-attention-backend "${MM_ATTENTION_BACKEND}" \
     --disable-radix-cache \
     --cuda-graph-max-bs 64 &
+SERVER_PID=$!
+trap 'echo "Stopping server after benchmark finished..."; kill $SERVER_PID 2>/dev/null' EXIT
 
 # Sleep 300s
 echo "Sleep 300s waiting for server to launch ..."

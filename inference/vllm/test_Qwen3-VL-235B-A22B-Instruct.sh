@@ -41,6 +41,8 @@ vllm serve $MODEL_PATH \
     --no-enable-prefix-caching \
     --disable-log-requests \
     --compilation-config '{"full_cuda_graph":true}' &
+SERVER_PID=$!
+trap 'echo "Stopping server after benchmark finished..."; kill $SERVER_PID 2>/dev/null' EXIT
 
 # Sleep 600s
 echo "Sleep 600s waiting for server to launch ..."

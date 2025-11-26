@@ -36,10 +36,12 @@ SGLANG_USE_AITER=1 python3 -m sglang.launch_server \
      	--num-continuous-decode-steps 4 \
     	--max-prefill-tokens 196608  \
     	--cuda-graph-max-bs 128 &
+SERVER_PID=$!
+trap 'echo "Stopping server after benchmark finished..."; kill $SERVER_PID 2>/dev/null' EXIT
 
-# Sleep 300s
-echo "Sleep 300s waiting for server to launch ..."
-sleep 300
+# Sleep 600s
+echo "Sleep 600s waiting for server to launch ..."
+sleep 600
 
 # Launch benchmark test
 # Loop over combinations
