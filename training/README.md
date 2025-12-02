@@ -49,6 +49,19 @@ pip install -e ".[torch,metrics]"
 TOKENIZERS_PARALLELISM=False OMP_NUM_THREADS=1 llamafactory-cli train examples/train_lora/qwen3_vl_lora_sft.yaml
 ```
 
+### DeepSeek v2 lite
+1. Launch docker image
+```bash
+podman run -it  --name megatron_training_env --device /dev/dri --device /dev/kfd --device /dev/infiniband  --device=/dev/infiniband/rdma_cm --network host --ipc host  --cap-add=SYS_ADMIN --cap-add SYS_PTRACE --security-opt seccomp=unconfined --privileged --group-add keep-groups  -v /shared/amdgpu/home/share/models:/models -v /shared/amdgpu/home/share/training_models:/training_models -v /shared/data:/shared/data -v /shared:/shared  -v $HOME:/workdir --workdir /workdir -v $HOME/.ssh:/root/.ssh  docker://rocm/megatron-lm:v25.9_gfx950
+```
+
+2. Run deepseek v2 lite training scripts
+```bash
+git clone https://github.com/AMD-AGI/Primus.git
+cd Primus && git checkout 7c7fc54 && git submodule update --init --recursive
+./examples/moe_package/run_deepseek_v2_lite_pretrain_mi355x.sh
+```
+
 ### DeepSeek v3
 1. Launch docker image
 ```bash
