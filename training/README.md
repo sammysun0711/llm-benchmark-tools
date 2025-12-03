@@ -72,3 +72,21 @@ podman run -it  --name megatron_training_env --device /dev/dri --device /dev/kfd
 ```bash
 ./test_train_megatron_lm_deepseekv3.sh
 ```
+
+### Qwen3-32B pretrain
+1. Launch docker image
+```bash
+podman run -it  --name megatron_training_env --device /dev/dri --device /dev/kfd --device /dev/infiniband  --device=/dev/infiniband/rdma_cm --network host --ipc host  --cap-add=SYS_ADMIN --cap-add SYS_PTRACE --security-opt seccomp=unconfined --privileged --group-add keep-groups  -v /shared/amdgpu/home/share/models:/models -v /shared/amdgpu/home/share/training_models:/training_models -v /shared/data:/shared/data -v /shared:/shared  -v $HOME:/workdir --workdir /workdir -v $HOME/.ssh:/root/.ssh  docker://rocm/megatron-lm:v25.9_gfx950
+```
+
+2. Install python dependency
+
+- Install Megatron-LM with qwen3 changes.
+```bash
+pip uninstall megatron-core
+git clone https://github.com/LuweiZhou2025/Megatron-LM.git && cd Megatron-LM && git checkout -b qwen3 origin/luwei/qwen3
+pip install -e .
+```
+
+3. Run the script to pertain Qwen3-32B with mock data. Change the argument as needed.
+bash examples/qwen/train_qwen3.sh FSDP=0 CP=1 PP=1 TP=1 MBS=16  BS=128  TE_FP8=0 MODEL_SIZE=32 SEQ_LENGTH=4096 TOTAL_ITERS=10  MOCK_DATA=1  RECOMPUTE_ACTIVATIONS=full CKPT_FORMAT=torch_dist
