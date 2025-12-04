@@ -15,23 +15,23 @@ pip install -e .
 
 3. Run the script to pertain Qwen3-32B with mock data. Change the argument as needed.
 ```bash
-bash examples/qwen/train_qwen3.sh FSDP=1 CP=1 PP=1 TP=1 MBS=24 BS=192 TE_FP8=1 MODEL_SIZE=32 SEQ_LENGTH=4096 TOTAL_ITERS=10  MOCK_DATA=1
+bash examples/qwen/train_qwen3.sh FSDP=1 CP=1 PP=1 TP=1 MBS=24 BS=192 TE_FP8=1 MODEL_SIZE=32 SEQ_LENGTH=4096 TOTAL_ITERS=10  MOCK_DATA=1 RECOMPUTE_ACTIVATIONS=full CKPT_FORMAT=torch_dist
 ```
 
-### Qwen3-32B-A3B Pretrain with Primus
+### Qwen3-30B-A3B Pretrain with Primus
 1. Launch docker image
 ```bash
-podman run -it  --name primus-gfx950-ainic-qwen3-32b-a3b --device /dev/dri --device /dev/kfd --device /dev/infiniband  --device=/dev/infiniband/rdma_cm --network host --ipc host  --cap-add=SYS_ADMIN --cap-add SYS_PTRACE --security-opt seccomp=unconfined --privileged --group-add keep-groups  -v /shared/amdgpu/home/share/models:/models -v /shared/amdgpu/home/share/training_models:/training_models -v /shared/data:/shared/data -v /shared:/shared  -v $HOME:/workdir --workdir /workdir -v $HOME/.ssh:/root/.ssh  docker://tasimage/primus:pr-316-gfx950-ainic
+podman run -it  --name primus-gfx950-ainic-qwen3-30b-a3b --device /dev/dri --device /dev/kfd --device /dev/infiniband  --device=/dev/infiniband/rdma_cm --network host --ipc host  --cap-add=SYS_ADMIN --cap-add SYS_PTRACE --security-opt seccomp=unconfined --privileged --group-add keep-groups  -v /shared/amdgpu/home/share/models:/models -v /shared/amdgpu/home/share/training_models:/training_models -v /shared/data:/shared/data -v /shared:/shared  -v $HOME:/workdir --workdir /workdir -v $HOME/.ssh:/root/.ssh  docker://tasimage/primus:pr-316-gfx950-ainic
 ```
 
-2. Run Qwen3-32B-A3B training scripts
+2. Run Qwen3-30B-A3B training scripts
 ```bash
 git clone https://github.com/AMD-AGI/Primus.git -b dev/tas/moe_package_v2
 cd Primus && git submodule update --init --recursive
 MoE_Features=(0 3 4 5 10 11) MBS=6 GBS=768 SEQ_LENGTH=4096 TP=1 ETP=1 PP=1 VPP=1 EP=8 CP=1 FP8=True TRAIN_ITERS=10  ./examples/customer_package/run_qwen3_30b_a3b_pretrain_mi355x.sh
 ```
 
-### Qwen3-32B-A3B SFT with LLaMA-Factory
+### Qwen3-30B-A3B SFT with LLaMA-Factory
 1. Launch docker image
 ```bash
 podman run -it  --name megatron_training_env_qwen3_sft --device /dev/dri --device /dev/kfd --device /dev/infiniband  --device=/dev/infiniband/rdma_cm --network host --ipc host  --cap-add=SYS_ADMIN --cap-add SYS_PTRACE --security-opt seccomp=unconfined --privileged --group-add keep-groups  -v /shared/amdgpu/home/share/models:/models -v /shared/amdgpu/home/share/training_models:/training_models -v /shared/data:/shared/data -v /shared:/shared  -v $HOME:/workdir --workdir /workdir -v $HOME/.ssh:/root/.ssh  docker://rocm/megatron-lm:v25.9_gfx950
