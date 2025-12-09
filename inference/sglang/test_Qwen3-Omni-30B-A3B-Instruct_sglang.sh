@@ -10,17 +10,19 @@ MODEL_NAME="Qwen3-Omni-30B-A3B-Instruct"
 OUT_DIR="${MODEL_NAME}-logs"
 mkdir -p "$OUT_DIR"
 
-SGLANG_VLM_CACHE_SIZE_MB=1000
+export SGLANG_VLM_CACHE_SIZE_MB=0
+export HIP_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
+export SGLANG_USE_AITER=1
 
 # ISL/OSL pairs
-declare -a isl_list=(1000 1000 2000)
-declare -a osl_list=(1000 2000 500)
-declare -a img_res_x_list=(960 800 960)
-declare -a img_res_y_list=(1280 800 1280)
-declare -a image_count_list=(1 1 10)
+declare -a isl_list=(10)
+declare -a osl_list=(1000)
+declare -a img_res_x_list=(960)
+declare -a img_res_y_list=(1280)
+declare -a image_count_list=(13)
 
 # Concurrency levels
-declare -a conc_list=(1 2 4 8 16 32 64)
+declare -a conc_list=(1 2 4 8 16 32)
 
 # Metrics configuration
 METRIC_PERCENTILES="50,90,95,99"
@@ -30,7 +32,7 @@ NUM_PROMPT=128
 MM_ATTENTION_BACKEND="aiter_attn" #fa3 for H20
 
 # Launch server
-SGLANG_USE_AITER=1 python3 -m sglang.launch_server \
+python3 -m sglang.launch_server \
     --model-path $MODEL_PATH \
     --host localhost    \
     --port 9000 \
