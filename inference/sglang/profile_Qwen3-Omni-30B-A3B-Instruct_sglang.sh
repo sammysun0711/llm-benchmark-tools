@@ -7,28 +7,31 @@ MODEL_PATH="/models/Qwen3-Omni-30B-A3B-Instruct/"
 MODEL_NAME="Qwen3-Omni-30B-A3B-Instruct"
 
 # Output directory
-OUT_DIR="${MODEL_NAME}-logs"
+OUT_DIR="${MODEL_NAME}-profile-logs"
 mkdir -p "$OUT_DIR"
 
 export SGLANG_VLM_CACHE_SIZE_MB=0
 export HIP_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
 export SGLANG_USE_AITER=1
+export SGLANG_TORCH_PROFILER_DIR="./sglang_profile_res"
+export SGLANG_PROFILE_WITH_STACK=1
+export SGLANG_PROFILE_RECORD_SHAPES=1
 
 # ISL/OSL pairs
 declare -a isl_list=(8000)
-declare -a osl_list=(500)
+declare -a osl_list=(10)
 declare -a img_res_x_list=(960)
 declare -a img_res_y_list=(1280)
 declare -a image_count_list=(20)
 
 # Concurrency levels
-declare -a conc_list=(1 2 4)
+declare -a conc_list=(2)
 
 # Metrics configuration
 METRIC_PERCENTILES="50,90,95,99"
 METRIC_LIST="ttft,tpot,itl,e2el"
 DATASET="image"
-NUM_PROMPT=128
+NUM_PROMPT=4
 MM_ATTENTION_BACKEND="aiter_attn" #fa3 for H20
 
 # Launch server
@@ -40,7 +43,7 @@ python3 -m sglang.launch_server \
     --data-parallel-size 2 \
     --trust-remote-code \
     --chunked-prefill-size 32768 \
-    --mem-fraction-static 0.8 \
+    --mem-fraction-static 0.85 \
     --mm-attention-backend "${MM_ATTENTION_BACKEND}" \
     --max-prefill-tokens 32768 \
     --disable-radix-cache \
@@ -49,9 +52,9 @@ python3 -m sglang.launch_server \
 SERVER_PID=$!
 trap 'echo "Stopping server after benchmark finished..."; kill $SERVER_PID 2>/dev/null' EXIT
 
-# Sleep 300s
-echo "Sleep 300s waiting for server to launch ..."
-sleep 300
+# Sleep 100s
+echo "Sleep 100s waiting for server to launch ..."
+sleep 100
 
 # Run benchmark test
 # Loop over combinations
@@ -88,6 +91,7 @@ for idx in "${!isl_list[@]}"; do
                 --image-resolution "${img_res_x}x${img_res_y}" \
                 --flush-cache \
                 --skip-special-tokens \
+                --profile \
                 --output-file "$OUT_DIR/$result_filename" \
                 2>&1 | tee "$OUT_DIR/$log_filename"
 
