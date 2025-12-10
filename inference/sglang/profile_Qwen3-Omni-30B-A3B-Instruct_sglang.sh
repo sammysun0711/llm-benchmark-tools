@@ -52,7 +52,7 @@ python3 -m sglang.launch_server \
 SERVER_PID=$!
 trap 'echo "Stopping server after benchmark finished..."; kill $SERVER_PID 2>/dev/null' EXIT
 
-# Sleep 300s
+# Sleep 100s
 echo "Sleep 100s waiting for server to launch ..."
 sleep 100
 
