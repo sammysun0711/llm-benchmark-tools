@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Model path
-MODEL_PATH="/root/workspace/Qwen3-Omni-30B-A3B-Instruct/"
+MODEL_PATH="/mywork/models/Qwen3-Omni-30B-A3B-Instruct/"
 
 # Model name
 MODEL_NAME="Qwen3-Omni-30B-A3B-Instruct"
@@ -15,14 +15,14 @@ export HIP_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
 export SGLANG_USE_AITER=1
 
 # ISL/OSL pairs
-declare -a isl_list=(10)
-declare -a osl_list=(1000)
+declare -a isl_list=(8000)
+declare -a osl_list=(500)
 declare -a img_res_x_list=(960)
 declare -a img_res_y_list=(1280)
-declare -a image_count_list=(13)
+declare -a image_count_list=(20)
 
 # Concurrency levels
-declare -a conc_list=(1 2 4 8 16 32)
+declare -a conc_list=(1 2 4)
 
 # Metrics configuration
 METRIC_PERCENTILES="50,90,95,99"
@@ -39,10 +39,12 @@ python3 -m sglang.launch_server \
     --tensor-parallel-size 4 \
     --data-parallel-size 2 \
     --trust-remote-code \
+    --chunked-prefill-size 32768 \
     --mem-fraction-static 0.8 \
     --mm-attention-backend "${MM_ATTENTION_BACKEND}" \
+    --max-prefill-tokens 32768 \
     --disable-radix-cache \
-    --cuda-graph-max-bs 64 &
+    --cuda-graph-max-bs 16 &
 SERVER_PID=$!
 trap 'echo "Stopping server after benchmark finished..."; kill $SERVER_PID 2>/dev/null' EXIT
 
@@ -84,7 +86,6 @@ for idx in "${!isl_list[@]}"; do
                 --image-count ${image_count}   \
                 --image-resolution "${img_res_x}x${img_res_y}" \
                 --flush-cache \
-                --exclude-special-tokens \
                 --output-file "$OUT_DIR/$result_filename" \
                 2>&1 | tee "$OUT_DIR/$log_filename"
 
