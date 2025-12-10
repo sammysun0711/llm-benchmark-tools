@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Model path
-MODEL_PATH="/mywork/models/Qwen3-Omni-30B-A3B-Instruct/"
+MODEL_PATH="/models/Qwen3-Omni-30B-A3B-Instruct/"
 
 # Model name
 MODEL_NAME="Qwen3-Omni-30B-A3B-Instruct"
