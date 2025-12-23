@@ -42,9 +42,9 @@ recipe = QuantizationModifier(
         "model.embed_tokens",         # 输入嵌入层  
         "re:.*visual.*",          # 视觉塔组件
         "re:.*audio_tower.*",  
-        "re:multi_modal_projector.*", # 多模态投影层  
+        #"re:multi_modal_projector.*", # 多模态投影层  
         "re:.*mlp.gate$",             # MoE 门控层  
-        "re:.*mlp.shared_expert_gate$", # 共享专家门控  
+        #"re:.*mlp.shared_expert_gate$", # 共享专家门控  
     ]  
 )  
   
