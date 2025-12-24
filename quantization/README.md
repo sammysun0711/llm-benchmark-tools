@@ -6,10 +6,10 @@ docker run -it --ipc=host --network=host --privileged --security-opt seccomp=unc
 
 2. Install llm-compressor
 ```bash
-pip install llmcompressor==0.8.1
+pip install llmcompressor==0.9.0 transformers==4.57.1
 ```
 
 3. Run Qwen3-Omni PTPC FP8 Quantization with llm-compressor
 ```python
-python qwen3-omni_fp8_ptpc_quant.py
+python3 qwen3-omni_fp8_ptpc_quant.py
 ```
